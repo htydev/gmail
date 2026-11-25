@@ -58,7 +58,7 @@ GMAIL COMMANDS
 
   gmail thread <threadId> [--download]
       Get thread with all messages.
-      Shows: Message-ID, headers, body, attachments.
+      Shows: Message-ID, per-message Gmail labels (including DRAFT/SENT), headers, body, attachments.
       --download saves attachments to <config-dir>/attachments/
 
   gmail labels list
@@ -448,6 +448,7 @@ async function handleThread(account: string, args: string[]) {
 		const thread = result as EnhancedThread;
 		for (const msg of thread.messages || []) {
 			console.log(`Message-ID: ${sanitizeSingleLine(msg.id || "")}`);
+			console.log(`Labels: ${(msg.labelIds || []).map(sanitizeSingleLine).join(",") || "(none)"}`);
 			console.log(`From: ${sanitizeSingleLine(msg.parsed.headers.from || "")}`);
 			console.log(`To: ${sanitizeSingleLine(msg.parsed.headers.to || "")}`);
 			console.log(`Date: ${sanitizeSingleLine(msg.parsed.headers.date || "")}`);
